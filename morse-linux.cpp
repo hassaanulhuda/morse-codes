@@ -44,7 +44,7 @@ int main(int argc, char const *argv[]) {
     std::string choice;
     std::string out = "";
     std::locale loc;
-    std::PlaySound();
+
     srand((unsigned)time(NULL));
 
     std::ifstream file("words.txt");
