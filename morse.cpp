@@ -4,7 +4,6 @@
 #include <fstream>
 #include <limits>
 #include <stdlib.h>
-#include <windows.h>
 
 std::string morseConvert(std::string letter){
     std::string alphabet[26] = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
@@ -121,7 +120,7 @@ int main(int argc, char const *argv[]) {
                         randomWord = "";
                     }
                     std::cout << std::endl;
-                    std::cout << "Type any letter and press enter to reveal answers ";
+                    std::cout << "Press ENTER to reveal the answers...";
                     std::cin.get();
                     std::cin.ignore();
                     clearTerminal();
