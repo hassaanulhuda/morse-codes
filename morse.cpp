@@ -37,6 +37,14 @@ std::string generateRandomWord(unsigned int num){
     return word;
 }
 
+void clearTerminal(){
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
+
 int main(int argc, char const *argv[]) {
 
     int input = -1;
@@ -58,7 +66,7 @@ int main(int argc, char const *argv[]) {
     
     while(input != 3){
         
-        system("clear");
+        clearTerminal();
         std::cout << "\tMAIN MENU \n \n";
         std::cout << "1)\tConvert\n";
         std::cout << "2)\tGenerate\n";
@@ -72,7 +80,7 @@ int main(int argc, char const *argv[]) {
             switch (input){
                 case 1:
                 {            
-                    system("clear");
+                    clearTerminal();
                     std::cout << "\nWhich word would you like to convert?: ";
                     getline(std::cin.ignore(), word);
                     for(int i = 0; i < word.length(); i++){
@@ -91,18 +99,17 @@ int main(int argc, char const *argv[]) {
                     break;
                 case 2:
                 {
-                    system("clear");
+                    clearTerminal();
                     std::cout << "How many words do you want to generate? " ;
                     int no_of_words = 0;
                     std::string randomWord = "";
                     std::cin >> no_of_words;
                     std::string words[no_of_words];
                     std::cout << std::endl;
-                    system("clear");
+                    clearTerminal();
                     for(int i = 0; i < no_of_words; i++){
                         randomWord = generateRandomWord(number_of_lines);
                         words[i] = randomWord;
-                        // std::cout << "chosen word: " + randomWord << std::endl;
                         for(int i = 0; i < randomWord.length(); i++){
                             std::string letter = std::string(1, std::tolower(randomWord[i], loc));
                             out += morseConvert(letter) + "/";
@@ -115,8 +122,9 @@ int main(int argc, char const *argv[]) {
                     }
                     std::cout << std::endl;
                     std::cout << "Type any letter and press enter to reveal answers ";
-                    std::cin >> word;
-                    system("clear");
+                    std::cin.get();
+                    std::cin.ignore();
+                    clearTerminal();
                     for(int i = 0; i < no_of_words; i++){
                         std::cout << (i+1);
                         std::cout << ". ";
