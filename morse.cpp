@@ -4,20 +4,29 @@
 #include <fstream>
 #include <limits>
 #include <stdlib.h>
+#include <random>
 
-std::string morseConvert(std::string letter){
-    std::string alphabet[26] = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
-    std::string morse[26] = {".-", "-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
-    for (int i = 0; i < 26; i++){
-        if(letter.compare(alphabet[i]) == 0){
-            return morse[i];
-        } else if (letter.compare(" ") == 0){
-            return " ";
+// Converts an English word to Morse code
+std::string morseConvert(std::string word){
+    std::locale loc;
+    std::string morse[27] = {".-", "-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--..","-....-"};
+    std::string out = "";
+    for(int i = 0; i < word.length(); i++){
+        char letter = std::tolower(word[i], loc);
+        int index = letter - 'a'; 
+        if(letter == 45){
+            out+= morse[26];
+        } else if((index <= 26) && (index >= 0)) {
+            out+= morse[index];
+        } else {
+            out+= " ";
         }
+        out += "/";
     }
-    return " ";
+    return out;
 }
 
+// Goes to a line in a file, and returns the fstream file in that state
 std::fstream& goToLine(std::fstream& file, unsigned int num){
     file.seekg(std::ios::beg);
     for(int i=0; i < num - 1; i++){
@@ -26,16 +35,17 @@ std::fstream& goToLine(std::fstream& file, unsigned int num){
     return file;
 }
 
-
-std::string generateRandomWord(unsigned int num){
+// Return a single word from a line in a file
+std::string getWordFromList(unsigned int randomNum){
     std::fstream file("words.txt");
-    int lineno = rand() % num + 1;
+    int lineno = randomNum;
     goToLine(file, lineno);
     std::string word;
     file >> word;
     return word;
 }
 
+// Clears the text in the terminal
 void clearTerminal(){
     #ifdef _WIN32
         system("cls");
@@ -52,19 +62,22 @@ int main(int argc, char const *argv[]) {
     std::string out = "";
     std::locale loc;
 
-    srand((unsigned)time(NULL));
-
     std::ifstream file("words.txt");
-    int number_of_lines = 0;
+    int numberOfLines = 0;
     std::string line;
     while (std::getline(file, line)){
-        ++number_of_lines;
+        ++numberOfLines;
     }
+
+    std::default_random_engine randEngine(time(0));
+    std::uniform_int_distribution<int> dist(1, numberOfLines);
 
     std::cout << "\nWelcome to the Morse Code convertor \n \n";
     
     while(input != 3){
         
+        out = "";
+
         clearTerminal();
         std::cout << "\tMAIN MENU \n \n";
         std::cout << "1)\tConvert\n";
@@ -82,10 +95,7 @@ int main(int argc, char const *argv[]) {
                     clearTerminal();
                     std::cout << "\nWhich word would you like to convert?: ";
                     getline(std::cin.ignore(), word);
-                    for(int i = 0; i < word.length(); i++){
-                        std::string letter = std::string(1, std::tolower(word[i], loc));
-                        out += morseConvert(letter) + "/";
-                    }
+                    out = morseConvert(word);
                     std::cout << "\nThis is " + out + " in Morse! \n \n";
                     std::cout << "Main Menu? [y/n] ";
                     std::cin >> choice;
@@ -107,12 +117,9 @@ int main(int argc, char const *argv[]) {
                     std::cout << std::endl;
                     clearTerminal();
                     for(int i = 0; i < no_of_words; i++){
-                        randomWord = generateRandomWord(number_of_lines);
+                        randomWord = getWordFromList(dist(randEngine));
                         words[i] = randomWord;
-                        for(int i = 0; i < randomWord.length(); i++){
-                            std::string letter = std::string(1, std::tolower(randomWord[i], loc));
-                            out += morseConvert(letter) + "/";
-                        }
+                        out = morseConvert(randomWord);
                         std::cout << (i+1);
                         std::cout << ". ";
                         std::cout << out << std::endl;
