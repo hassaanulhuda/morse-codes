@@ -8,11 +8,10 @@
 
 // Converts an English word to Morse code
 std::string morseConvert(std::string word){
-    std::locale loc;
     std::string morse[27] = {".-", "-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--..","-....-"};
     std::string out = "";
     for(int i = 0; i < word.length(); i++){
-        char letter = std::tolower(word[i], loc);
+        char letter = std::tolower(word[i]);
         int index = letter - 'a'; 
         if(letter == 45){
             out+= morse[26];
@@ -26,7 +25,7 @@ std::string morseConvert(std::string word){
     return out;
 }
 
-// Goes to a line in a file, and returns the fstream file in that state
+// Goes to a line in a file, and returns the file in that state
 std::fstream& goToLine(std::fstream& file, unsigned int num){
     file.seekg(std::ios::beg);
     for(int i=0; i < num - 1; i++){
@@ -56,11 +55,10 @@ void clearTerminal(){
 
 int main(int argc, char const *argv[]) {
 
-    int input = -1;
+    int input = -1; // Menu input variable
     std::string word;
     std::string choice;
     std::string out = "";
-    std::locale loc;
 
     std::ifstream file("words.txt");
     int numberOfLines = 0;
@@ -90,32 +88,34 @@ int main(int argc, char const *argv[]) {
             input = 3;
         } else {
             switch (input){
-                case 1:
+                case 1: // Convert
                 {            
                     clearTerminal();
+
                     std::cout << "\nWhich word would you like to convert?: ";
                     getline(std::cin.ignore(), word);
+
                     out = morseConvert(word);
                     std::cout << "\nThis is " + out + " in Morse! \n \n";
+
                     std::cout << "Main Menu? [y/n] ";
                     std::cin >> choice;
-                    if(choice.compare("y")){
-                        input = 3;
-                    } else {
-                        input = -1;
-                    }
+                    input = choice.compare("y") ? 3 : -1;
                 }
                     break;
-                case 2:
+                case 2: // Generate
                 {
                     clearTerminal();
+
                     std::cout << "How many words do you want to generate? " ;
                     int no_of_words = 0;
-                    std::string randomWord = "";
                     std::cin >> no_of_words;
-                    std::string words[no_of_words];
                     std::cout << std::endl;
+
+                    std::string randomWord = "";
+                    std::string words[no_of_words];
                     clearTerminal();
+
                     for(int i = 0; i < no_of_words; i++){
                         randomWord = getWordFromList(dist(randEngine));
                         words[i] = randomWord;
@@ -127,23 +127,23 @@ int main(int argc, char const *argv[]) {
                         randomWord = "";
                     }
                     std::cout << std::endl;
+
                     std::cout << "Press ENTER to reveal the answers...";
                     std::cin.get();
                     std::cin.ignore();
                     clearTerminal();
+
                     for(int i = 0; i < no_of_words; i++){
                         std::cout << (i+1);
                         std::cout << ". ";
                         std::cout << words[i] << std::endl;
                     }
                     std::cout << std::endl;
+                    
                     std::cout << "Main Menu? [y/n] ";
                     std::cin >> choice;
-                    if(choice.compare("y")){
-                        input = 3;
-                    } else {
-                        input = -1;
-                    }         
+                    input = choice.compare("y") ? 3 : -1;
+
                     std::cout << std::endl;
                 }
                     break;
