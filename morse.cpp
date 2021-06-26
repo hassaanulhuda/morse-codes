@@ -14,11 +14,11 @@ std::string morseConvert(std::string word){
         char letter = std::tolower(word[i]);
         int index = letter - 'a'; 
         if(letter == 45){
-            out+= morse[26];
+            out += morse[26];
         } else if((index <= 26) && (index >= 0)) {
-            out+= morse[index];
+            out += morse[index];
         } else {
-            out+= " ";
+            out += " ";
         }
         out += "/";
     }
@@ -139,7 +139,7 @@ int main(int argc, char const *argv[]) {
                         std::cout << words[i] << std::endl;
                     }
                     std::cout << std::endl;
-                    
+
                     std::cout << "Main Menu? [y/n] ";
                     std::cin >> choice;
                     input = choice.compare("y") ? 3 : -1;
