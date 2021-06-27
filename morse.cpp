@@ -67,7 +67,7 @@ int main(int argc, char const *argv[]) {
         ++numberOfLines;
     }
 
-    std::default_random_engine randEngine(time(0));
+    std::minstd_rand0 randEngine(time(0));
     std::uniform_int_distribution<int> dist(1, numberOfLines);
 
     std::cout << "\nWelcome to the Morse Code convertor \n \n";
@@ -147,6 +147,10 @@ int main(int argc, char const *argv[]) {
                     std::cout << std::endl;
                 }
                     break;
+                case 3:
+                {
+                    break;
+                }
                 default:
                     std::cout << "Wrong option! \n \n";
                     input = -1;
